@@ -3,6 +3,8 @@ package br.com.alura.forum.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -49,7 +51,8 @@ public class TopicosController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<TopicoDTO> cadastrar(@RequestBody TopicoForm topicoForm, UriComponentsBuilder uriCompBuilder) { /// *Form, e pra pega info da tela/usuario e lancar pro programa. 
+	public ResponseEntity<TopicoDTO> cadastrar(@RequestBody @Valid TopicoForm topicoForm, 
+			UriComponentsBuilder uriCompBuilder) { /// *Form, e pra pega info da tela/usuario e lancar pro programa. 
 		//o oposto do dto, que e pra pega do programa e manda pro usuario;
 		Topico topico = topicoForm.converter(cursoRepository);
 		topicoRepository.save(topico);
