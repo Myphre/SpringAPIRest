@@ -9,6 +9,8 @@ import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -49,7 +51,9 @@ public class TopicosController {
 	private CursoRepository cursoRepository;
 
 	@GetMapping
-	//@ResponseBody // Spring devolve o metodo diretamente, nao irei navegar pela pagina
+	@Cacheable(value = "listaDeTopicos") // Deve-se utilizar cache em tabelas que nao sao constantemente usadas. Aqui, no caso,
+	// e so para uso didatico.
+	//@ResponseBody // Spring devolve o metodo diretamente
 	public Page<TopicoDTO> lista(@RequestParam(required = false) String nomeCurso,
 			//@RequestParam int pagina, @RequestParam int qtd, @RequestParam String ordem){ Metodo manual
 			@PageableDefault(page = 0, direction = Direction.DESC, size = 10, sort = "id") Pageable paginacao  ){
@@ -71,6 +75,7 @@ public class TopicosController {
 	
 	@PostMapping
 	@Transactional
+	@CacheEvict(value = "listaDeTopicos", allEntries = true )
 	public ResponseEntity<TopicoDTO> cadastrar(@RequestBody @Valid TopicoForm topicoForm, 
 			UriComponentsBuilder uriCompBuilder) { /// *Form, e pra pega info da tela/usuario e lancar pro programa. 
 		//o oposto do dto, que e pra pega do programa e manda pro usuario;
@@ -96,6 +101,7 @@ public class TopicosController {
 	
 	@PutMapping("/{id}")
 	@Transactional
+	@CacheEvict(value = "listaDeTopicos", allEntries = true )
 	public ResponseEntity<TopicoDTO> atualizar(@PathVariable Long id, 
 			@RequestBody @Valid AtualizacaoTopicoForm topicoForm){
 		
@@ -111,6 +117,7 @@ public class TopicosController {
 	
 	@DeleteMapping("/{id}")
 	@Transactional
+	@CacheEvict(value = "listaDeTopicos", allEntries = true )
 	public ResponseEntity<?> deletar(@PathVariable Long id){
 
 		Optional<Topico> optional = topicoRepository.findById(id);
