@@ -9,6 +9,11 @@ import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriBuilder;
@@ -44,15 +50,20 @@ public class TopicosController {
 
 	@GetMapping
 	//@ResponseBody // Spring devolve o metodo diretamente, nao irei navegar pela pagina
-	
-	public List<TopicoDTO> lista(String nomeCurso){
+	public Page<TopicoDTO> lista(@RequestParam(required = false) String nomeCurso,
+			//@RequestParam int pagina, @RequestParam int qtd, @RequestParam String ordem){ Metodo manual
+			@PageableDefault(page = 0, direction = Direction.DESC, size = 10, sort = "id") Pageable paginacao  ){
+		//http://localhost:8080/topicos/?page=0&size=2&sort=id,asc&campo=4  EXEMPLO consulta paginacao automatica
+		
+		// Pageable pagiancao = PageRequest.of(pagina, qtd, Direction.ASC, ordem); Paginacao "MANUAL", pega
+		//manualmente os parametros pela chamada da funcao. 
 		
 		if(nomeCurso == null) {
-			List<Topico> topicos = topicoRepository.findAll();
+			Page<Topico> topicos = topicoRepository.findAll(paginacao);
 			return TopicoDTO.converter(topicos);
 		}
 		else {
-			List<Topico> topicos = topicoRepository.findByCursoNome(nomeCurso);
+			Page<Topico> topicos = topicoRepository.findByCursoNome(nomeCurso, paginacao);
 			return TopicoDTO.converter(topicos);
 		}
 		
