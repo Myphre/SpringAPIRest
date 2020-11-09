@@ -32,7 +32,7 @@ public class TopicoForm {
 	
 	public Topico converter(CursoRepository cursoRepository) {
 		Curso curso = cursoRepository.findByNome(this.nomeCurso);
-		return new Topico();
+		return new Topico(titulo, mensagem, curso);
 		
 	}
 }
