@@ -79,6 +79,7 @@ public class TopicosController {
 	public ResponseEntity<TopicoDTO> cadastrar(@RequestBody @Valid TopicoForm topicoForm, 
 			UriComponentsBuilder uriCompBuilder) { /// *Form, e pra pega info da tela/usuario e lancar pro programa. 
 		//o oposto do dto, que e pra pega do programa e manda pro usuario;
+		// UriComponentsBuilder e pra devolver o codigo 201, que indica sucesso no cadastramento/post e nao o codigo 200 somente. 
 		Topico topico = topicoForm.converter(cursoRepository);
 		topicoRepository.save(topico);
 		

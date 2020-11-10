@@ -31,10 +31,10 @@ public class TopicoForm {
 	public void setMensagem(String mensagem) {
 		this.mensagem = mensagem;
 	}
-	public String getNomecurso() {
+	public String getNomeCurso() {
 		return nomeCurso;
 	}
-	public void setNomecurso(String nomeCurso) {
+	public void setNomeCurso(String nomeCurso) {
 		this.nomeCurso = nomeCurso;
 	}
 	
