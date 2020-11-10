@@ -48,6 +48,7 @@ public class SecurityConfifurations extends WebSecurityConfigurerAdapter{
 		.antMatchers(HttpMethod.GET, "/topicos").permitAll()
 		.antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
 		.antMatchers(HttpMethod.POST, "/auth").permitAll()
+		.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
 		.anyRequest().authenticated()
 		.and().csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -55,13 +56,13 @@ public class SecurityConfifurations extends WebSecurityConfigurerAdapter{
 
 	}
 	
-	
 	//configuracao de recursos estaticos(js, css, html..)
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		super.configure(web);
+	    web.ignoring()
+	        .antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
 	}
-	
+
 	public static void main(String[] args) {
 		System.out.println(new BCryptPasswordEncoder().encode("159267348"));
 	}
