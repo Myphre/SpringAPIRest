@@ -26,6 +26,7 @@ public class Usuario  implements UserDetails{
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Perfil> listaDePerfis =  new ArrayList<>();
 
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -116,6 +117,14 @@ public class Usuario  implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public List<Perfil> getListaDePerfis() {
+		return listaDePerfis;
+	}
+
+	public void setListaDePerfis(List<Perfil> listaDePerfis) {
+		this.listaDePerfis = listaDePerfis;
 	}
 
 }
